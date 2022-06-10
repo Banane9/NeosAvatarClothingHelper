@@ -31,7 +31,7 @@ namespace AvatarClothingHelper
         public override string Author => "Banane9";
         public override string Link => "https://github.com/Banane9/NeosAvatarClothingHelper";
         public override string Name => "AvatarClothingHelper";
-        public override string Version => "1.0.0";
+        public override string Version => "1.1.0";
 
         public override void OnEngineInit()
         {
@@ -78,6 +78,20 @@ namespace AvatarClothingHelper
             }
         }
 
+        private static Slot getObjectRoot(Slot slot)
+        {
+            var implicitRoot = slot.GetComponentInParents<IImplicitObjectRoot>(null, true, false);
+            var objectRoot = slot.GetObjectRoot();
+
+            if (implicitRoot == null)
+                return objectRoot;
+
+            if (objectRoot == slot || implicitRoot.Slot.HierachyDepth > objectRoot.HierachyDepth)
+                return implicitRoot.Slot;
+
+            return objectRoot;
+        }
+
         [HarmonyPatch(typeof(ModelImporter))]
         private static class ModelImporterPatch
         {
@@ -105,8 +119,7 @@ namespace AvatarClothingHelper
                 var button = ui.Button("Setup as Primary Blendshape Source", color.Pink);
                 var button2 = ui.Button("Setup best Blendshape Source", color.Pink);
 
-                var avatarRoot = __instance.Slot.GetComponentInParents<AvatarRoot>();
-                var root = avatarRoot?.Slot ?? __instance.Slot?.Parent ?? __instance.Slot;
+                var root = getObjectRoot(__instance.Slot);
 
                 button.LocalPressed += (sender, data) =>
                 {

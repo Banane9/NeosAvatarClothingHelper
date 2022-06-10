@@ -9,9 +9,9 @@ namespace AvatarClothingHelper
 {
     internal class EnumerableInjector<T> : IEnumerable<T>
     {
+        public Action Postfix = nothing;
         public Action<T, bool> PostItem = nothing;
         public Action Prefix = nothing;
-        public Action Postfix = nothing;
         public Func<T, bool> PreItem = yes;
         public Func<T, T> TransformItem = nothing;
 
@@ -55,14 +55,8 @@ namespace AvatarClothingHelper
         private static void nothing(T _, bool __)
         { }
 
-        private static T nothing(T item)
-        {
-            return item;
-        }
+        private static T nothing(T item) => item;
 
-        private static bool yes(T _)
-        {
-            return true;
-        }
+        private static bool yes(T _) => true;
     }
 }
