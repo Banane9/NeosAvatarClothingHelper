@@ -58,6 +58,7 @@
     <Compile Include="AvatarClothingHelper.cs" />
     <Compile Include="Blendshape.cs" />
     <Compile Include="EnumerableInjector.cs" />
+    <Compile Include="LocalButtonPressActionExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
