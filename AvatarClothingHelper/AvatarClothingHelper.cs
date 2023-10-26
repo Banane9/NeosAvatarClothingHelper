@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+<<<<<<< Updated upstream
 using System.Reflection;
 using System.Text;
 using BaseX;
@@ -18,6 +19,15 @@ using NeosModLoader;
 namespace AvatarClothingHelper
 {
     public class AvatarClothingHelper : NeosMod
+=======
+using ResoniteModLoader.Utility;
+using System;
+
+namespace AvatarClothingHelper
+{
+    
+    public class AvatarClothingHelper : ResoniteMod
+>>>>>>> Stashed changes
     {
         public static ModConfiguration Config;
         private static readonly string blendshapeSyncSlotName = "Blendshape Sync";
@@ -28,8 +38,13 @@ namespace AvatarClothingHelper
         [AutoRegisterConfigKey]
         private static ModConfigurationKey<bool> GenerateSlotPerBlendshape = new ModConfigurationKey<bool>("GenerateSlotPerBlendshape", "Generate each Blendshape ValueCopy and MultiDriver on a nested slot.", () => true);
 
+<<<<<<< Updated upstream
         public override string Author => "Banane9";
         public override string Link => "https://github.com/Banane9/NeosAvatarClothingHelper";
+=======
+        public override string Author => "Banane9 & darbdarb & hazre";
+        public override string Link => "https://github.com/Banane9/ResoniteAvatarClothingHelper";
+>>>>>>> Stashed changes
         public override string Name => "AvatarClothingHelper";
         public override string Version => "1.1.0";
 
@@ -113,27 +128,32 @@ namespace AvatarClothingHelper
             [HarmonyPatch(nameof(SkinnedMeshRenderer.BuildInspectorUI))]
             private static void BuildInspectorUIPostfix(SkinnedMeshRenderer __instance, UIBuilder ui)
             {
+<<<<<<< Updated upstream
                 if (!Config.GetValue(EnableInspectorButtons) || __instance.Slot.Find(blendshapeSyncSlotName) != null)
                     return;
 
                 var button = ui.Button("Setup as Primary Blendshape Source", color.Pink);
                 var button2 = ui.Button("Setup best Blendshape Source", color.Pink);
-
+=======
                 var root = getObjectRoot(__instance.Slot);
+                if (!Config.GetValue(EnableInspectorButtons) || __instance.Slot.FindChild(blendshapeSyncSlotName) != null)
+                    return;
 
-                button.LocalPressed += (sender, data) =>
-                {
+                IButton button1 = null;
+                IButton button2 = null;
+>>>>>>> Stashed changes
+
+                button1 = ui.Button("Setup as Primary Blendshape Source", colorX.Pink).SetupLocalAction((button) => {
                     driveSecondaryBlendshapes(root, __instance);
-                    button.Slot.Destroy();
+                    button1.Slot.Destroy();
                     button2.Slot.Destroy();
-                };
+                });
 
-                button2.LocalPressed += (sender, data) =>
-                {
+                button2 = ui.Button("Setup best Blendshape Source", colorX.Pink).SetupLocalAction((button) => {
                     driveSecondaryBlendshapes(root);
-                    button.Slot.Destroy();
+                    button1.Slot.Destroy();
                     button2.Slot.Destroy();
-                };
+                });
             }
         }
     }
